@@ -4,6 +4,8 @@
 
 #include "Particle.h"
 #line 1 "/Users/freymann/Dropbox/Electronics/_CODE/ParticleWorkbench/wshp_temperature_probe/src/dual-tcouple-a.ino"
+// 7.10.20 Updated for Ubidots STEM + Ubidots.h library
+
 /*************** DMF 4.22.15
  * This code is used in 'WSHP Water Temp SparkCore'
  * Core Name 'dmf_ExternalAnt_2'
@@ -28,6 +30,9 @@
 // Adapted directly from Adafruit code from my file serialthermocouple_dmf 9.1.12
 // dmf 2.7.15
 
+// 7.10.20 
+#include "Ubidots.h"
+
 // This #include statement was automatically added by the Spark IDE.
 #include "HttpClient.h"
 // This #include statement was automatically added by the Spark IDE.
@@ -41,7 +46,7 @@
 // Declaring the variables for Http to Ubidots
 void setup();
 void loop();
-#line 36 "/Users/freymann/Dropbox/Electronics/_CODE/ParticleWorkbench/wshp_temperature_probe/src/dual-tcouple-a.ino"
+#line 41 "/Users/freymann/Dropbox/Electronics/_CODE/ParticleWorkbench/wshp_temperature_probe/src/dual-tcouple-a.ino"
 HttpClient http;
 
 // Headers currently need to be set at init, useful for API keys etc.
@@ -81,6 +86,9 @@ double AadOffset = 3.0;
 double BadOffset = 0.0;
 
 Adafruit_MAX31855 thermocouple(thermoCLK, thermoCS, thermoDO);
+
+// 7.10.20 Ubidots migration
+Ubidots ubidots(UBIDOTS_TOKEN, UBI_EDUCATIONAL, UBI_TCP); 
 
 void setup() {
   Serial.begin(9600);
@@ -142,6 +150,8 @@ void loop() {
 
    if (thermoToggle == 0) {   // This is from MUX input 1 "A"
 
+        // This is OUTLET temperature
+
         thermoTempFA = f;
         // CORRECTION FOR TEMPERATURE MISREAD OFFSET!!
         thermoTempFA += AadOffset;
@@ -171,6 +181,8 @@ void loop() {
 
    } else {   // This is from MUX input 3 "B"
 
+        // This is INLET temperature 
+
         thermoTempFB = f;
         // CORRECTION FOR TEMPERATURE MISREAD OFFSET!!
         thermoTempFB += BadOffset;
@@ -186,6 +198,17 @@ void loop() {
         request.path = "/api/v1.6/variables/" VARIABLE_IDFB "/values";
         request.body = "{\"value\":" + String(thermoTempFB) + "}";
         http.post(request, response, headers);
+
+        // 7.10.20 Send both temperatures at the same time after both have been recorded
+        ubidots.add(VARIABLE_INLET, thermoTempFB);
+        ubidots.add(VARIABLE_OUTLET, thermoTempFA);
+
+        bool bufferSent = false;
+        bufferSent = ubidots.send(UBIDOTS_DEVICE); 
+
+        if (bufferSent) {
+           Serial.println("Values sent by the device");
+        }
 
         // toggle the A1 level to low -> switch to input 1 "A"
         digitalWrite(thermoMUX, LOW);
