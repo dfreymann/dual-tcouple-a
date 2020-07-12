@@ -24,8 +24,6 @@
 // Adapted directly from Adafruit code from my file serialthermocouple_dmf 9.1.12
 // dmf 2.7.15
 
-// 7.10.20 
-#include "Ubidots.h"
 
 // This #include statement was automatically added by the Spark IDE.
 #include "HttpClient.h"
@@ -33,6 +31,9 @@
 #include "Adafruit_MAX31855.h"
 // need to include math.h explicitly for the isnan() test
 #include "math.h"
+
+// 7.10.20 
+#include "Ubidots.h"
 
 // access tokens are externalized
 #include "ubidots_tokens.h"

@@ -30,8 +30,6 @@
 // Adapted directly from Adafruit code from my file serialthermocouple_dmf 9.1.12
 // dmf 2.7.15
 
-// 7.10.20 
-#include "Ubidots.h"
 
 // This #include statement was automatically added by the Spark IDE.
 #include "HttpClient.h"
@@ -40,13 +38,16 @@
 // need to include math.h explicitly for the isnan() test
 #include "math.h"
 
+// 7.10.20 
+#include "Ubidots.h"
+
 // access tokens are externalized
 #include "ubidots_tokens.h"
 
 // Declaring the variables for Http to Ubidots
 void setup();
 void loop();
-#line 41 "/Users/freymann/Dropbox/Electronics/_CODE/ParticleWorkbench/wshp_temperature_probe/src/dual-tcouple-a.ino"
+#line 42 "/Users/freymann/Dropbox/Electronics/_CODE/ParticleWorkbench/wshp_temperature_probe/src/dual-tcouple-a.ino"
 HttpClient http;
 
 // Headers currently need to be set at init, useful for API keys etc.
