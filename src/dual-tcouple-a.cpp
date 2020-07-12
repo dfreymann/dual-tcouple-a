@@ -185,7 +185,8 @@ void loop() {
         // delay 30 seconds to before reading input 3
         // note: 2.22.15 code failed when this interval was set to only 2 seconds!
         // worked when connected to computer by USB, but now when wall-powered.
-        delay (30000);
+        // 7.12.20 change to 10s
+        delay (10000);
 
 
    } else {   // This is from MUX input 3 "B"
@@ -227,7 +228,7 @@ void loop() {
         //delay before next pair of readings
         // should be delay(330000) for 6 minutes total between posts
         //this is important! only have 30000 datapoints/month in Ubidots account
-        delay (330000);
+        delay (350000);
 
    }
 
