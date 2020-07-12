@@ -1,8 +1,16 @@
-// 7.10.20 Updated for Ubidots STEM + Ubidots.h library
+// 7.11.20 Converted to Photon (dmf_photon_B)
+//         Rewired MAX81355 3V3 supply (old Spark 3V3 pin is VBAT on Photon)
+//         Now working with Ubidots STEM ok. 
+// 
+// 7.10.20 Trying to update for Ubidots STEM + Ubidots.h library
+// Spark Core is not supported. Therefore have to move to Photon. 
+// ** problem ** Photon is not reading the Thermocouple meter (MAX31855)
+// So -> seeing null values with corrections (16.7°). 
 
 /*************** DMF 4.22.15
  * This code is used in 'WSHP Water Temp SparkCore'
- * Core Name 'dmf_ExternalAnt_2'
+ * Core Name 'dmf_ExternalAnt_2' [old] 
+ * 7.11.20 Running on Photon: dmf_photon_B
  ***************/
 
  /***************************************************
@@ -156,10 +164,10 @@ void loop() {
         delay(100);
 
         // Send to Ubidots... VARIABLE_IDF_A defined above
-        request.path = "/api/v1.6/variables/" VARIABLE_IDFA "/values";
-        request.body = "{\"value\":" + String(thermoTempFA) + "}";
+        // request.path = "/api/v1.6/variables/" VARIABLE_IDFA "/values";
+        // request.body = "{\"value\":" + String(thermoTempFA) + "}";
 
-        http.post(request, response, headers);
+        // http.post(request, response, headers);
 
         // toggle the A1 to high -> switch to input 3 "B"
         digitalWrite(thermoMUX, HIGH);
@@ -187,9 +195,9 @@ void loop() {
         delay(100);
 
         // Send to Ubidots... VARIABLE_IDF_B defined above
-        request.path = "/api/v1.6/variables/" VARIABLE_IDFB "/values";
-        request.body = "{\"value\":" + String(thermoTempFB) + "}";
-        http.post(request, response, headers);
+        // request.path = "/api/v1.6/variables/" VARIABLE_IDFB "/values";
+        // request.body = "{\"value\":" + String(thermoTempFB) + "}";
+        // http.post(request, response, headers);
 
         // 7.10.20 Send both temperatures at the same time after both have been recorded
         ubidots.add(VARIABLE_INLET, thermoTempFB);
