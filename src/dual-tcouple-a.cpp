@@ -91,8 +91,8 @@ double BadZero = -8.498;
 double BadSlope = 1.27510;
 // dmf 3.9.15 pain in the ass correction for deviation between A and B (approx -3degF observed at outlet)
 // Correction applied to derived Farenheit reading!
-double AadOffset = 3.0;
-double BadOffset = 0.0;
+double AadOffset = 3.0;     // 7.12.20 Note outlet temp ~ hallway pipe temp, so keep this AadOffset
+double BadOffset = 2.2;     // 7.12.20 Correction from average deviation over 30 minutes w/ no heat  
 
 Adafruit_MAX31855 thermocouple(thermoCLK, thermoCS, thermoDO);
 
